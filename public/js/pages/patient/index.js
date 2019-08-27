@@ -373,7 +373,7 @@ function userAction() {
                 CreateComponent.initFloatLabel();
                 CreateComponent.initSummernote();
             }
-        })
+        });
         // onHidden callback
         $(modal_sub_action_dom).on('hidden.bs.modal', function() {
             $('#modal-sub-content').html('');
@@ -445,22 +445,72 @@ function userAction() {
     }
     /*store echo and print*/
     $(document).on('click','#echo-store-print',function (){
-        echo_store(function (id) {
-            $.ajax({
-                url:route('echo.print',id),
-                dataType:'html',
-                method:'get',
-                success:function (data) {
-                    $('#echo-print-page').html(data);
-                    $('#echo-print-page').printThis();
+        $.ajax({
+            url:route('echo.store'),
+            dataType:'json',
+            method:'post',
+            data:$('#form-echo').serialize(),
+            success:function (data) {
+                if (data.success) {
+                    swal({
+                        buttonsStyling: false,
+                        confirmButtonClass: 'btn btn-primary',
+                        cancelButtonClass: 'btn btn-light',
+                        title: 'រូចរាល់!',
+                        text: 'ប្រតិបត្តិការជោគជ័យ!',
+                        type: 'success'
+                    });
+                    /*print page*/
+                    $.ajax({
+                        url:route('echo.print',data.echo_id),
+                        dataType:'html',
+                        method:'get',
+                        success:function (data) {
+                            $('#echo-print-page').html(data);
+                            $('#echo-print-page').printThis();
+                        }
+                    })
+                }else{
+                    swal({
+                        buttonsStyling: false,
+                        confirmButtonClass: 'btn btn-primary',
+                        cancelButtonClass: 'btn btn-light',
+                        title: 'មិនរូចរាល់!',
+                        text: 'ប្រតិបត្តិការបរាជ័យ!',
+                        type: 'warning'
+                    });
                 }
-            })
-        })
+            }
+        });
     });
     /*store echo*/
     $(document).on('click','#echo-store',function (){
-        echo_store(function (id) {
-            console.log('saved')
+        $.ajax({
+            url:route('echo.store'),
+            dataType:'json',
+            method:'post',
+            data:$('#form-echo').serialize(),
+            success:function (data) {
+                if (data.success) {
+                    swal({
+                        buttonsStyling: false,
+                        confirmButtonClass: 'btn btn-primary',
+                        cancelButtonClass: 'btn btn-light',
+                        title: 'រូចរាល់!',
+                        text: 'ប្រតិបត្តិការជោគជ័យ!',
+                        type: 'success'
+                    });
+                }else{
+                    swal({
+                        buttonsStyling: false,
+                        confirmButtonClass: 'btn btn-primary',
+                        cancelButtonClass: 'btn btn-light',
+                        title: 'មិនរូចរាល់!',
+                        text: 'ប្រតិបត្តិការបរាជ័យ!',
+                        type: 'warning'
+                    });
+                }
+            }
         });
     });
     /*labor store and print function*/
