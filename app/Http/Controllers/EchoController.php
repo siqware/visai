@@ -6,6 +6,7 @@ use App\_Echo;
 use App\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Mews\Purifier\Facades\Purifier;
 
 class EchoController extends Controller
 {
@@ -33,6 +34,7 @@ class EchoController extends Controller
             'attachment'=>'required',
             'created_at'=>'required',
         ]);
+        $input['result'] = Purifier::clean($input['result']);
         if ($validator->passes()) {
             $newEcho = _Echo::create($input);
             if ($newEcho){

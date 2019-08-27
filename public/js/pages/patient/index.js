@@ -587,6 +587,9 @@ function userAction() {
             }else {
                 $(val).addClass('text-warning')
             }
+            if (_this_val===-999){
+                $(val).remove();
+            }
         })
     }
 }
